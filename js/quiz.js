@@ -4,8 +4,9 @@ $(document).ready(function(){
 	 ** define vars and disable buttons as long no answer is given
 	 **/
 	let current_question;
+	let counting_question=$(".question_count").val();
 	let your_answers_array=new Array();
-	for(let ans=1;ans<=$(".question_count").val();ans++){
+	for(let ans=1;ans<=counting_question;ans++){
 		your_answers_array[ans]=new Array();
 	}
 	(your_answers_array.length>0)?$("button[id^='answer_button']").prop("disabled",false):$("button[id^='answer_button']").prop("disabled",true);
@@ -107,12 +108,12 @@ $(document).ready(function(){
 		let given_answered_string=$(this).val();
 		
 		if(given_answered_string!=""){
-		
+			
 			let given_letter=given_answered_string.split(',');
 			given_letter.forEach(function(gl){
 				$("input[type='checkbox'][name*='"+current_question+"'][id='"+gl+"']").prop("checked",true)
 			});		
-			
+
 			if(correct_answered_string==given_answered_string){
 				$("input[type='checkbox'][name*='"+current_question+"']:not(:checked)").each(function(){
 					$(this).prop("disabled",true).addClass("lightgray").removeClass("blue").css({"opacity":.1});
@@ -137,8 +138,8 @@ $(document).ready(function(){
 				
 				let half=0;
 				for(da=0;da<=correct_answered_string.length-1;da++){
-					for(ya=0;ya<=given_answered_string[current_question].length-1;ya++){
-						if(correct_answered_string[da]===given_answered_string[current_question][ya]){
+					for(ya=0;ya<=your_answers_array[current_question].length-1;ya++){
+						if(correct_answered_string[da]===your_answers_array[current_question][ya]){
 							half+=1;
 							break;
 						}
