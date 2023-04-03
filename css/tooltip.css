@@ -1,0 +1,31 @@
+#tooltip{
+	position: absolute;
+	display: inline-block;
+	width: 500px;
+	height: 500px;
+	border: solid 1px #fc0;
+	overflow:hidden;
+	z-index: 9998;
+	opacity: 1;
+	pointer-events: none;
+	font-size: 50px;
+	line-height: 500px;
+	margin: auto;
+}
+#tooltip p{
+	display: inline-block;
+	width: 500px;
+	height: 500px;
+	z-index: 9999;
+	opacity: 1;
+	pointer-events: none;
+	font-size: 50px;
+	line-height: 500px;
+	margin: auto;
+	animation: zoom-in 1s ease;
+}
+@keyframes zoom-in{
+	0% {transform: scale(1,1);}
+	50% {transform: scale(1.5, 1.5);}
+	100% {transform: scale(5,5);}
+}

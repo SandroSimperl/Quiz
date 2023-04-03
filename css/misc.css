@@ -1,0 +1,51 @@
+/* 
+	tables
+*/
+table, tr{
+		width: 100%;
+		font-size: 12px;
+}
+td {
+		width: auto;
+		font-size: 12px;
+		text-align: left;
+		border: solid 1px rgba(51,51,51,1);
+		white-space: nowrap;
+}
+/* 
+	break lines
+*/
+hr { 
+	border-top: 1px dashed #8c8b8b; 
+} 
+hr:after{ 
+	content: '\002702'; 
+	display: inline-block; 
+	position: relative; 
+	top: -12px; 
+	left: -40%; 
+	padding: 0 3px; 
+	color: #8c8b8b; 
+	font-size: 18px; 
+}
+/* 
+	progress bar
+*/
+.progressbar{
+	position: relative;
+	width: 300px;
+	height: 30px;
+	border: 1px solid rgba(195,195,195,1);
+	border-radius: 10px;
+	margin: auto;
+	overflow: hidden;
+}
+.progressbar span{
+	position: absolute;
+	height: 100%;
+	width: 0px;
+	display: block;
+	line-height: 30px;
+	text-align: end;
+	padding-right: 5px;
+}

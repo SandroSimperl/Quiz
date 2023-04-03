@@ -1,0 +1,7 @@
+main div.main{
+	display: block;
+	width: 90%;
+	z-index: 900;
+    margin-bottom: 20px;
+}
+

@@ -1,0 +1,9 @@
+footer div.footer {
+	display: block;
+	width: 99%;
+	height: 200px;
+    border: rgba(50,50,50,1.00) thin dashed;
+    border-radius: 10px;
+    background: rgba(11,11,11,.5);
+    padding-top: 10px;
+}
