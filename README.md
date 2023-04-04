@@ -17,3 +17,8 @@ Eine Quiz Seite mit PHP JS HTML CSS
   2. Erstellen eigener Fragenkataloge
   3. Erstellen eigener Quiz
   4. Themenbereiche auswählbar einbinden
+
+---
+
+Bei Fragen und Anregungen gerne melden oder requesten
+Geistiges Eigentum von sandrosimperl.cc@outlook.de
