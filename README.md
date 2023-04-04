@@ -21,4 +21,5 @@ Eine Quiz Seite mit PHP JS HTML CSS
 ---
 
 Bei Fragen und Anregungen gerne melden oder requesten
+
 Geistiges Eigentum von sandrosimperl.cc@outlook.de
