@@ -5,6 +5,8 @@ $(document).ready(function(){
 	 **/
 	let current_question;
 	let counting_question=$(".question_count").val();
+	let game_id=$("#game_id").val();
+	let game_user=$("#game_user").val();
 	let your_answers_array=new Array();
 	for(let ans=1;ans<=counting_question;ans++){
 		your_answers_array[ans]=new Array();
@@ -31,7 +33,7 @@ $(document).ready(function(){
 	 **/
 	$(".answer_button").click(function(){
 		current_question=$(this).attr("id").replace(/[^\d.]/g,"");
-
+		
 		let correct_answers_string=$(".question_correct_answers_"+current_question).val();
 		let given_answers_string=$(".question_given_answers_"+current_question).val();
 		
@@ -81,7 +83,8 @@ $(document).ready(function(){
 			$("p[name^='wrong_answer_"+current_question+"']").show();
 		}
 		
-		let game_id=$("#game_id").val();
+		(current_question===counting_question)?$("div.done_button").show():$("div.done_button").hide();
+		
 		$.ajax({
 			type:"post",
 			url:"php/quiz.update.game.php",
@@ -103,7 +106,7 @@ $(document).ready(function(){
 	 **/
 	$("input[class^='question_given_answers']").each(function(){
 		current_question=$(this).attr("class").replace(/[^\d.]/g,"");
-
+		
 		let correct_answered_string=$(".question_correct_answers_"+current_question).val();
 		let given_answered_string=$(this).val();
 		
@@ -112,7 +115,7 @@ $(document).ready(function(){
 			let given_letter=given_answered_string.split(',');
 			given_letter.forEach(function(gl){
 				$("input[type='checkbox'][name*='"+current_question+"'][id='"+gl+"']").prop("checked",true)
-			});		
+			});
 
 			if(correct_answered_string==given_answered_string){
 				$("input[type='checkbox'][name*='"+current_question+"']:not(:checked)").each(function(){
@@ -155,26 +158,31 @@ $(document).ready(function(){
 			}
 			
 			$("button[id^='answer_button'][id$='"+current_question+"']").prop("disabled",true).hide();
-			/*
-			return false;
-			alert(current_question_answered[current_question]);
-			let given_answered_string=$(this).val();
-				let current_given_answered=[];
-				let match2=given_answered_string.split(',');
-				match2.forEach(function(item){
-					current_given_answered.push(item);
-				});
-			let current_question_answered=[];
-				let match1=correct_answered_string.split(',');
-				match1.forEach(function(item){
-					current_question_answered.push(item);
-				});
-			
-			for(an=1;an<=current_given_answered){
-				$("input[type='checkbox'][name*='"+current_question+"']
-			}
-					
-			*/
 		}
+		
+		(current_question===counting_question)?$("div.done_button").show():$("div.done_button").hide();
+	});
+	/**
+	 ** finish button
+	 **/
+	$("#done_button").click(function(){
+		alert(game_id);
+		alert(game_user);
+		$.ajax({
+			type:"post",
+			url:"php/quiz.finish.game.php",
+			data:{
+				gameid:game_id,
+				gameuser:game_user
+			},
+			success:function(response){
+				if(response=="success"){
+					$("main").load("./php/result.php");
+					alert("1: "+response)
+				}else{
+					alert("2: "+response)
+				}
+			}
+		});
 	});
 });

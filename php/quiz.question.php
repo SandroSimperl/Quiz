@@ -1,13 +1,15 @@
 <div class="question" id="<?php echo $cnt; ?>">
-	<?php if($_SESSION["admin"]==1){ ?>
-		<input type="text" class="game_id ai" id="game_id" value="<?php echo $quiz["game_id"]; ?>" />
-		<input type="text" class="question_number ai" value="<?php echo $cnt; ?>" />
-		<input type="text" class="question_count ai" value="<?php echo sizeof(explode(",",$quiz["game_questions"])); ?>" /><br />
-		
-		<input type="text" class="question_id_<?php echo $cnt; ?> ai" value="<?php echo $questions["id"]; ?>" />
-		<input type="text" class="question_correct_answers_<?php echo $cnt; ?> ai" value="<?php echo $questions["question_answer_Z"]; ?>" />
-		<input type="text" class="question_given_answers_<?php echo $cnt; ?> ai" value="<?php echo $game["game_questions_".$cnt]; ?>" />
-	<?php } ?>
+	<?php if($_SESSION["admin"]==1){$state="text";}else{$state="hidden";}?>
+	
+	<input type="<?php echo $state; ?>" class="game_user ai" id="game_user" value="<?php echo $quiz["game_user"]; ?>" />
+
+	<input type="<?php echo $state; ?>" class="game_id ai" id="game_id" value="<?php echo $quiz["game_id"]; ?>" />
+	<input type="<?php echo $state; ?>" class="question_number ai" value="<?php echo $cnt; ?>" />
+	<input type="<?php echo $state; ?>" class="question_count ai" value="<?php echo sizeof(explode(",",$quiz["game_questions"])); ?>" /><br />
+	
+	<input type="<?php echo $state; ?>" class="question_id_<?php echo $cnt; ?> ai" value="<?php echo $questions["id"]; ?>" />
+	<input type="<?php echo $state; ?>" class="question_correct_answers_<?php echo $cnt; ?> ai" value="<?php echo $questions["question_answer_Z"]; ?>" />
+	<input type="<?php echo $state; ?>" class="question_given_answers_<?php echo $cnt; ?> ai" value="<?php echo $game["game_questions_".$cnt]; ?>" />
 	
 	<p class="green left"><?php echo "Frage ".$cnt.") [ID: ".$questions["id"]."] - (".$questions["question_answer_Z"].")"; ?></p><br />
 	<p class="orange left"><?php echo $questions["question_text"]; ?></p><br /><br /><?php

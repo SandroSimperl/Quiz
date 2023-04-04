@@ -17,6 +17,8 @@
 			include("quiz.question.php");
 			$cnt=$cnt+1;
 		}
+		echo"<div class=\"done_button none\"><button id=\"done_button\" class=\"def_button done_button\">abschliessen</button></div>";
+
 	} else { ?>
 		<br /><br /><p>Irgendwas ist schief gelaufen. Bitte starte diese Seite neu!</p><?php
 	}

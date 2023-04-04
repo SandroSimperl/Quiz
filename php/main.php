@@ -2,7 +2,6 @@
 	session_start();
 	if(isset($_SESSION["userid"])){
 		include("db.get.maxquestions.php");
-		
 		if(!isset($_SESSION["opengame"])){ ?>
 			<div class="main">
 				<p class="green">--- Auswahl Quiz starten ---</p><br />
