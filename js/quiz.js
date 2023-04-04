@@ -1,27 +1,29 @@
-
 $(document).ready(function(){
 	/**
 	 ** define vars and disable buttons as long no answer is given
 	 **/
-	let current_question;
+	let current_question,da,ya,correct_letters,half;
 	let counting_question=$(".question_count").val();
 	let game_id=$("#game_id").val();
 	let game_user=$("#game_user").val();
 	let your_answers_array=new Array();
+	
 	for(let ans=1;ans<=counting_question;ans++){
 		your_answers_array[ans]=new Array();
 	}
+	
 	(your_answers_array.length>0)?$("button[id^='answer_button']").prop("disabled",false):$("button[id^='answer_button']").prop("disabled",true);
 	/**
 	 ** checkboxes
 	 **/
 	$("input[type=checkbox]").click(function(){
 		current_question=$(this).attr("name").replace(/[^\d.]/g,"");
-		if(this.checked){
-			your_answers_array[current_question].push($(this).attr("id"));
-		}else{
-			your_answers_array[current_question].splice($.inArray($(this).attr("id"),your_answers_array[current_question]),1);
-		}
+		
+		(this.checked)?
+			your_answers_array[current_question].push($(this).attr("id")):
+			your_answers_array[current_question].splice($.inArray($(this).attr("id"),your_answers_array[current_question]),1)
+		;
+		
 		(your_answers_array[current_question]!="")?
 			$("button[id^='answer_button'][id$='"+current_question+"']").prop("disabled",false):
 			$("button[id^='answer_button'][id$='"+current_question+"']").prop("disabled",true)
@@ -65,7 +67,13 @@ $(document).ready(function(){
 				$(this).next("label").addClass("red").removeClass("blue").css({"opacity":.8});
 			});
 			
-			let half=0;
+			correct_letters=correct_answers_string.split(',');
+			correct_letters.forEach(function(cl){
+				$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").css({"opacity":.2});
+				$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").next("label").addClass("orange").addClass("underline").removeClass("blue").css({"opacity":.5});
+			});
+
+			half=0;
 			for(da=0;da<=current_question_answers.length-1;da++){
 				for(ya=0;ya<=your_answers_array[current_question].length-1;ya++){
 					if(current_question_answers[da]===your_answers_array[current_question][ya]){
@@ -138,11 +146,17 @@ $(document).ready(function(){
 					$(this).prop("disabled",true).addClass("red").removeClass("blue").css({"opacity":.4});
 					$(this).next("label").addClass("red").removeClass("blue").css({"opacity":.8});
 				});
+
+				correct_letters=correct_answered_string.split(',');
+				correct_letters.forEach(function(cl){
+					$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").css({"opacity":.2});
+					$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").next("label").addClass("orange").addClass("underline").removeClass("blue").css({"opacity":.5});
+				});
 				
-				let half=0;
+				half=0;
 				for(da=0;da<=correct_answered_string.length-1;da++){
 					for(ya=0;ya<=your_answers_array[current_question].length-1;ya++){
-						if(correct_answered_string[da]===your_answers_array[current_question][ya]){
+						if(correct_answered_string[da]==your_answers_array[current_question][ya]){
 							half+=1;
 							break;
 						}
@@ -150,6 +164,7 @@ $(document).ready(function(){
 				}
 				
 				$("span[name^='wrong_"+current_question+"']").html(correct_answered_string);
+				alert("Half: "+half);
 				(half!=0)?
 					$("span[name^='wrong_tip_"+current_question+"']").html(", "+number_to_string(half)+" der Antwroten war zwar richtig.\nAber eben nicht alle."):
 					$("span[name^='wrong_tip_"+current_question+"']").html("")
@@ -166,8 +181,6 @@ $(document).ready(function(){
 	 ** finish button
 	 **/
 	$("#done_button").click(function(){
-		alert(game_id);
-		alert(game_user);
 		$.ajax({
 			type:"post",
 			url:"php/quiz.finish.game.php",
@@ -178,9 +191,7 @@ $(document).ready(function(){
 			success:function(response){
 				if(response=="success"){
 					$("main").load("./php/result.php");
-					alert("1: "+response)
-				}else{
-					alert("2: "+response)
+					alert("1: "+response);
 				}
 			}
 		});
