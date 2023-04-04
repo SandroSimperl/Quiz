@@ -31,85 +31,6 @@ $(document).ready(function(){
 		$("[class^='question_given_answers_'][class*='"+current_question+"']").val(your_answers_array[current_question]);
 	});
 	/**
-	 ** answering button
-	 **/
-	$(".answer_button").click(function(){
-		current_question=$(this).attr("id").replace(/[^\d.]/g,"");
-		
-		let correct_answers_string=$(".question_correct_answers_"+current_question).val();
-		let given_answers_string=$(".question_given_answers_"+current_question).val();
-		
-		let current_question_answers=[];
-		let match=correct_answers_string.split(',');
-		match.forEach(function(item){
-			current_question_answers.push(item);
-		});
-		
-		if(your_answers_array[current_question].toString()==current_question_answers.toString()){
-			$("input[type='checkbox'][name*='"+current_question+"']:not(:checked)").each(function(){
-				$(this).prop("disabled",true).addClass("lightgray").removeClass("blue").css({"opacity":.1});
-				$(this).next("label").addClass("lightgray").removeClass("blue").css({"opacity":.1});
-			});
-			$("input[type='checkbox'][name*='"+current_question+"']:checked").each(function(){
-				$(this).prop("disabled",true).addClass("green").removeClass("blue").css({"opacity":.4});
-				$(this).next("label").addClass("green").removeClass("blue").css({"opacity":.8});
-			});
-			
-			$("span[name^='correct_"+current_question+"']").html(correct_answers_string);
-			$("p[name^='correct_answer_"+current_question+"']").show();
-		}else{
-			$("input[type='checkbox'][name*='"+current_question+"']:not(:checked)").each(function(){
-				$(this).prop("disabled",true).addClass("lightgray").removeClass("blue").css({"opacity":.1});
-				$(this).next("label").addClass("lightgray").removeClass("blue").css({"opacity":.1});
-			});
-			$("input[type='checkbox'][name*='"+current_question+"']:checked").each(function(){
-				$(this).prop("disabled",true).addClass("red").removeClass("blue").css({"opacity":.4});
-				$(this).next("label").addClass("red").removeClass("blue").css({"opacity":.8});
-			});
-			
-			correct_letters=correct_answers_string.split(',');
-			correct_letters.forEach(function(cl){
-				$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").css({"opacity":.2});
-				$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").next("label").addClass("orange").addClass("underline").removeClass("blue").css({"opacity":.5});
-			});
-
-			half=0;
-			for(da=0;da<=current_question_answers.length-1;da++){
-				for(ya=0;ya<=your_answers_array[current_question].length-1;ya++){
-					if(current_question_answers[da]===your_answers_array[current_question][ya]){
-						half+=1;
-						break;
-					}
-				}
-			}
-			
-			$("span[name^='wrong_"+current_question+"']").html(correct_answers_string);
-			(half!=0)?
-				$("span[name^='wrong_tip_"+current_question+"']").html(", "+number_to_string(half)+" der Antwroten war zwar richtig.\nAber eben nicht alle."):
-				$("span[name^='wrong_tip_"+current_question+"']").html("")
-			;
-			$("p[name^='wrong_answer_"+current_question+"']").show();
-		}
-		
-		(current_question===counting_question)?$("div.done_button").show():$("div.done_button").hide();
-		
-		$.ajax({
-			type:"post",
-			url:"php/quiz.update.game.php",
-			data:{
-				game_id:game_id,
-				current_question:current_question,
-				current_answers:your_answers_array[current_question].toString()
-			},
-			success:function(response){
-				(response=="success")?reload_footer():alert("Fehler. Bitte lade die Seite neu\n".response);
-			}
-		});
-		
-		$("button[id^='answer_button'][id$='"+current_question+"']").prop("disabled",true).hide();
-		your_answers_array[current_question]=[];
-	});
-	/**
 	 ** find answered questions
 	 **/
 	$("input[class^='question_given_answers']").each(function(){
@@ -155,8 +76,10 @@ $(document).ready(function(){
 				
 				half=0;
 				for(da=0;da<=correct_answered_string.length-1;da++){
-					for(ya=0;ya<=your_answers_array[current_question].length-1;ya++){
-						if(correct_answered_string[da]==your_answers_array[current_question][ya]){
+					for(ya=0;ya<=your_answers_array[current_question].length;ya++){
+                        alert("correct_answered_string[da]: "+correct_answered_string[da]);
+                        alert("your_answers_array[current_question][ya]: "+your_answers_array[current_question][ya]);
+						if(correct_answered_string[da]===your_answers_array[current_question][ya]){
 							half+=1;
 							break;
 						}
@@ -164,8 +87,7 @@ $(document).ready(function(){
 				}
 				
 				$("span[name^='wrong_"+current_question+"']").html(correct_answered_string);
-				alert("Half: "+half);
-				(half!=0)?
+				(half>0)?
 					$("span[name^='wrong_tip_"+current_question+"']").html(", "+number_to_string(half)+" der Antwroten war zwar richtig.\nAber eben nicht alle."):
 					$("span[name^='wrong_tip_"+current_question+"']").html("")
 				;
@@ -176,6 +98,84 @@ $(document).ready(function(){
 		}
 		
 		(current_question===counting_question)?$("div.done_button").show():$("div.done_button").hide();
+	});
+    /**
+	 ** answering button
+	 **/
+	$(".answer_button").click(function(){
+		current_question=$(this).attr("id").replace(/[^\d.]/g,"");
+		
+		let correct_answers_string=$(".question_correct_answers_"+current_question).val();
+		let given_answers_string=$(".question_given_answers_"+current_question).val();
+		
+		let current_question_answers=[];
+		let match=correct_answers_string.split(',');
+		match.forEach(function(item){
+			current_question_answers.push(item);
+		});
+		
+		if(your_answers_array[current_question].toString()==current_question_answers.toString()){
+			$("input[type='checkbox'][name*='"+current_question+"']:not(:checked)").each(function(){
+				$(this).prop("disabled",true).addClass("lightgray").removeClass("blue").css({"opacity":.1});
+				$(this).next("label").addClass("lightgray").removeClass("blue").css({"opacity":.1});
+			});
+			$("input[type='checkbox'][name*='"+current_question+"']:checked").each(function(){
+				$(this).prop("disabled",true).addClass("green").removeClass("blue").css({"opacity":.4});
+				$(this).next("label").addClass("green").removeClass("blue").css({"opacity":.8});
+			});
+			$("span[name^='correct_"+current_question+"']").html(correct_answers_string);
+			$("p[name^='correct_answer_"+current_question+"']").show();
+		}else{
+			$("input[type='checkbox'][name*='"+current_question+"']:not(:checked)").each(function(){
+				$(this).prop("disabled",true).addClass("lightgray").removeClass("blue").css({"opacity":.1});
+				$(this).next("label").addClass("lightgray").removeClass("blue").css({"opacity":.1});
+			});
+			$("input[type='checkbox'][name*='"+current_question+"']:checked").each(function(){
+				$(this).prop("disabled",true).addClass("red").removeClass("blue").css({"opacity":.4});
+				$(this).next("label").addClass("red").removeClass("blue").css({"opacity":.8});
+			});
+            
+			correct_letters=correct_answers_string.split(',');
+			correct_letters.forEach(function(cl){
+				$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").css({"opacity":.2});
+				$("input[type='checkbox'][name*='"+current_question+"'][id='"+cl+"']").next("label").addClass("orange").addClass("underline").removeClass("blue").css({"opacity":.5});
+			});
+
+			half=0;
+			for(da=0;da<=current_question_answers.length-1;da++){
+				for(ya=0;ya<=your_answers_array[current_question].length-1;ya++){
+					if(current_question_answers[da]==your_answers_array[current_question][ya]){
+						half+=1;
+						break;
+					}
+				}
+			}
+			
+			$("span[name^='wrong_"+current_question+"']").html(correct_answers_string);
+			(half!=0)?
+				$("span[name^='wrong_tip_"+current_question+"']").html(", "+number_to_string(half)+" der Antwroten war zwar richtig.\nAber eben nicht alle."):
+				$("span[name^='wrong_tip_"+current_question+"']").html("")
+			;
+			$("p[name^='wrong_answer_"+current_question+"']").show();
+		}
+		
+		(current_question===counting_question)?$("div.done_button").show():$("div.done_button").hide();
+		
+		$.ajax({
+			type:"post",
+			url:"php/quiz.update.game.php",
+			data:{
+				game_id:game_id,
+				current_question:current_question,
+				current_answers:your_answers_array[current_question].toString()
+			},
+			success:function(response){
+				(response=="success")?reload_footer():alert("Fehler. Bitte lade die Seite neu\n".response);
+			}
+		});
+		
+		$("button[id^='answer_button'][id$='"+current_question+"']").prop("disabled",true).hide();
+		your_answers_array[current_question]=[];
 	});
 	/**
 	 ** finish button
